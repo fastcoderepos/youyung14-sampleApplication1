@@ -1,0 +1,15 @@
+FROM postgres:10.14-alpine
+
+#
+COPY ./create_db.sh /docker-entrypoint-initdb.d/20-create_db.sh
+COPY ./timesheet.sql /timesheet.sql
+
+RUN chmod +x /docker-entrypoint-initdb.d/20-create_db.sh
+
+# Adjust PostgreSQL configuration to accept remote connections 
+# RUN echo "host all all 0.0.0.0/0 md5" >> /var/lib/postgresql/data/pg_hba.conf
+
+# RUN echo "listen_addresses='*'" >> /var/lib/postgresql/data/postgresql.conf
+
+# expose port
+EXPOSE 5432

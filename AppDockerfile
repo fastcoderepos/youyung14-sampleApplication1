@@ -1,0 +1,43 @@
+FROM openjdk:8-jdk
+
+WORKDIR /
+
+RUN apt-get update
+RUN apt-get install -y curl
+
+#Install Maven
+
+RUN curl -O https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+RUN tar -xvf *.gz
+RUN rm -rf *.gz
+ENV MAVEN_HOME /apache-maven-3.5.4
+ENV PATH $MAVEN_HOME/bin:$PATH
+
+#Install Postgres JDBC Driver
+
+RUN curl -O https://jdbc.postgresql.org/download/postgresql-42.2.2.jar
+RUN mvn install:install-file "-Dfile=postgresql-42.2.2.jar" "-DgroupId=org.postgresql" "-DartifactId=postgresql" "-Dversion=42.2.2" "-Dpackaging=jar"
+
+# Install Git
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y git
+
+ENV DEBIAN_FRONTEND noninteractive
+
+#Build
+RUN mkdir /build
+
+COPY timesheet/ /build/timesheet/
+
+WORKDIR /build/timesheet
+
+RUN mvn clean package -Dmaven.test.skip=true
+
+#expose port
+EXPOSE 5555
+
+WORKDIR /build/timesheet/target
+
+#cmd to execute
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","timesheet-0.0.1-SNAPSHOT.war"]
