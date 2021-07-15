@@ -1,0 +1,24 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "sourceMap": true,
+    "module": "es2015",
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "declaration": false,
+    "outDir": "./dist/out-tsc",
+    "target": "es5",
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "moduleResolution": "node"
+  }
+}
